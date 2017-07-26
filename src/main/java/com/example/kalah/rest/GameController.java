@@ -18,6 +18,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/game/")
 public class GameController {
 
+    public static final String ID = "ID";
+
     @Autowired
     private GameBoardStore gameBoardStore;
 
@@ -26,17 +28,17 @@ public class GameController {
     public GameBoard newGame(HttpSession session) {
         final GameBoard gameBoard = new GameBoard(0);
         int id = gameBoardStore.add(gameBoard);
-        session.setAttribute("ID", id);
+        session.setAttribute(ID, id);
         return gameBoard;
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "move")
     @ResponseBody
     public GameBoard move(@RequestBody MoveAction moveAction, HttpSession session) {
-        if (session.getAttribute("ID") == null) {
+        if (session.getAttribute(ID) == null) {
             throw new GameNotFoundException();
         }
-        Integer id = (Integer) session.getAttribute("ID");
+        Integer id = (Integer) session.getAttribute(ID);
         final GameBoard gameBoard = gameBoardStore.get(id);
         gameBoard.move(moveAction.getPlayerIndex(), moveAction.getIndex());
         return gameBoard;
@@ -45,10 +47,10 @@ public class GameController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public GameBoard get(HttpSession session) {
-        if (session.getAttribute("ID") == null) {
+        if (session.getAttribute(ID) == null) {
             throw new GameNotFoundException();
         }
-        Integer id = (Integer) session.getAttribute("ID");
+        Integer id = (Integer) session.getAttribute(ID);
         final GameBoard gameBoard = gameBoardStore.get(id);
         return gameBoard;
     }
