@@ -36,7 +36,7 @@ public class GameController {
     @ResponseBody
     public GameBoard move(@RequestBody MoveAction moveAction, HttpSession session) {
         if (session.getAttribute(ID) == null) {
-            throw new GameNotFoundException();
+            throw new GameNotFoundException("No game found");
         }
         Integer id = (Integer) session.getAttribute(ID);
         final GameBoard gameBoard = gameBoardStore.get(id);
@@ -48,7 +48,7 @@ public class GameController {
     @ResponseBody
     public GameBoard get(HttpSession session) {
         if (session.getAttribute(ID) == null) {
-            throw new GameNotFoundException();
+            throw new GameNotFoundException("No game found");
         }
         Integer id = (Integer) session.getAttribute(ID);
         final GameBoard gameBoard = gameBoardStore.get(id);
